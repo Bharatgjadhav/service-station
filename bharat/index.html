@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>main page</title>
+        <style>
+            *{
+                margin: 0%;
+                padding: 0%;
+            }
+        </style>
+    </head> 
+    <body>
+    <div style="background-color: rgb(110, 68, 177); height: 100vh;">
+      
+        <div style="display: flex; align-items: center; justify-content: center;">
+            <p>Admin Login </p>
+            <input type="text" class="uName">
+            <input type="text" class="pass">
+            <button class="prom">
+                submit
+            </button>
+        </div>
+    </div>
+    </body>
+    <script>
+        let userName=document.querySelector(".uName")
+        let password=document.querySelector(".pass")
+        let sub=document.querySelector(".prom")
+        sub.addEventListener("click",logIn)
+        function logIn()
+        {
+        if(userName.value == "admin")
+            if( password.value == 123)
+            {
+                console.log("logdIn")
+            }
+            else
+            console.log("wrong input")
+        }
+    </script>
+</html>
