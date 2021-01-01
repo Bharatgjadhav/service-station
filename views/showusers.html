@@ -8,7 +8,7 @@
             <thead>
                 <tr>
                     <th>
-                        ID
+                        user_id
                     </th>
                     <th>
                         Name
@@ -31,13 +31,15 @@
                 </tr>
             </thead>
             <tbody>
-
+                    <% for(let users of service-station){%>
                 <tr>
-                    <td><%=></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                    <td><%= users.user_id  %></td>
+                    <td><%=users.name></td>
+                    <td><%=users.phone></td>
+                    <td><%=users.gender></td>
+                    <td><%=users.email_id></td>
+                    <td><%=users.address></td>
+                    <td><%=users.password</td>
                 </tr>
             </tbody>
         </table>
