@@ -31,16 +31,17 @@
                 </tr>
             </thead>
             <tbody>
-                    <% for(let users of service-station){%>
+                    <% for(let users of showusers){%>
                 <tr>
-                    <td><%= users.user_id  %></td>
-                    <td><%=users.name></td>
-                    <td><%=users.phone></td>
-                    <td><%=users.gender></td>
-                    <td><%=users.email_id></td>
-                    <td><%=users.address></td>
-                    <td><%=users.password</td>
+                    <td><%= users.USER_ID %></td>
+                    <td><%=users.NAME %></td>
+                    <td><%=users.PHONE %></td>
+                    <td><%=users.GENDER %></td>
+                    <td><%=users.EMAIL_ID %></td>
+                    <td><%=users.ADDRESS %></td>
+                    <td><%=users.PASSWORD %></td>
                 </tr>
+                <%}%>
             </tbody>
         </table>
     </body>

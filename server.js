@@ -12,7 +12,7 @@ const db= new sqlite3.Database("./service-station.db",(err)=>{
         console.log("db connected")
         db.run(`CREATE TABLE IF NOT EXISTS USERS(USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                   NAME VARCHAR(30) NOT NULL,
-                                                  PHONE VARCHAR(10) UNIQUE NOT NULL,
+                                                  PHONE VARCHAR(15) UNIQUE NOT NULL,
                                                   GENDER VARCHAR(2) NOT NULL,
                                                   EMAIL_ID VARCHAR(30) NOT NULL,
                                                   ADDRESS VARCHAR(50) NOT NULL,
@@ -40,23 +40,24 @@ app.get("/home",(req, res)=>{
 
 app.get("/addusers",(req, res)=>{
     res.render("addusers",{status:0})
-
 })
 
-app.post("addusers", (req, res)=>{
-    console.log("inside")
+app.post("/addusers", (req, res)=>{
+    console.log("INSIDE")
     let user_id = req.body.user_id
     let name  = req.body.name
     let phone = req.body.phone
+    console.log(phone);
     let gender = req.body.gender
     let email_id = req.body.email_id
+    console.log(email_id)
     let address = req.body.address
     let password = req.body.password
-        db.run("INSERT INTO USERS(USER-ID,NAME,PHONE,GENDER,EMAIL-ID,ADDRESS,PASSWORD) VALUES(?,?,?,?,?,?,?)",
-        [NULL, NAME, PHONE, GENDER, EMAIL_ID, ADDRESS, PASSWORD],(err)=>{
+        db.run("INSERT INTO USERS(USER_ID,NAME,PHONE,GENDER,EMAIL_ID,ADDRESS,PASSWORD) VALUES(?,?,?,?,?,?,?)",
+        [user_id, name, phone, gender, email_id, address, password],(err)=>{
                         if(err){
                             console.log(err)
-                            res.status(5000).render("addusers",{status : err})
+                            res.status(500).render("addusers",{status : err})
                         }
                         else{
                             res.status(200).render("addusers",{status: "success"})
@@ -64,13 +65,13 @@ app.post("addusers", (req, res)=>{
                     })
 })
 
-app.get("/service-station", (req, res)=>{      /* display users page */
+app.get("/users", (req, res)=>{      /* display users page */
         db.all("select *from users",(err, rows)=>{
             console.log(rows)
             if(err)
-                res.render("showusers",{status: err})
+                res.render("users",{status: err})
 
-            res.render("showusers",{showusers:rows})
+            res.render("users",{showusers :rows})
         })
 })  
 
