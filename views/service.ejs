@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1>New service</h1>
+        <form action="service" method="post">
+            <label for="Mechanic_Id"> Mechanic_Id</label>
+            <input type="text" id="Mechanic_Id" name="Mechanic_Id">
+
+            <label for="Vehicle_Number">Vehical_Number</label>
+            <input type="text" id="Vehicle_Number" name="Vehicle_Number">
+
+            <label for="Service_Detail">Service_Detail</label>
+            <input type="text" id="Service_Detail" name="Service_Detail">
+
+            <label for="Date">Date</label>
+            <input type="text" id="Date" name="Date">
+            <button>Submit</button>
+        </form>
+        
+        </div>
+
+    </div>
+    <script>
+         window.onload = function(){
+        let status = ("<%= status %>")
+        if(status)
+        
+            alert("<%= status %>")
+        
+         }
+    </script>
+</body>
+</html>
