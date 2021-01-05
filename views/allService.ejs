@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div class="container">
+        <table>
+            <thead>
+                <tr>
+                    <th>
+                        Mechanic-ID
+                    </th>
+                    <th>
+                        Vehicle-number
+                    </th>
+                    <th>
+                        Service-Detail
+                    </th>
+                    <th>
+                        Date
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <% for (let allService of showServiceDetails){%>
+                <tr>
+                    <td><%= allService.MECHANIC_ID %></td>
+                    <td><%=allService.VEHICLE_NUMBER %></td>
+                    <td><%=allService.SERVICE_DETAIL %></td>
+                    <td><%=allService.DATE %></td>
+                </tr>
+                <%}%>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

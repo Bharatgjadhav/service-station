@@ -21,10 +21,10 @@ const db= new sqlite3.Database("./service-station.db",(err)=>{
                                 if(err)
                                      console.log("could not create table",err)
                                 else{
-                                     console.log(" USER table  created successfully ")
+                                     console.log(" USER table  created successfully")
                                      }
                          })
-        db.run(`CREATE TABLE IF NOT EXISTS SERVICE (MECHANIC_ID INTEGER PRIMARYKEY AUTO INCREMENT,
+        db.run(`CREATE TABLE IF NOT EXISTS SERVICE (MECHANIC_ID INTEGER PRIMARY KEY AUTOINCREMENT,
                                                    VEHICLE_NUMBER VARCHAR(25) UNIQUE NOT NULL, 
                                                    SERVICE_DETAIL VARCHAR(100) NOT NULL,
                                                    DATE VARCHAR(10) NOT NULL)`,
@@ -36,6 +36,18 @@ const db= new sqlite3.Database("./service-station.db",(err)=>{
                                                 }
                                             })
     }
+    db.run(`CREATE TABLE IF NOT EXISTS BILLING (SERVICE VARCHAR(100),
+                                                DATE VARCHAR(10),
+                                                FOREIGN KEY (SERVICE) REFERENCES SERVICE(SERVICE_DETAIL)
+                                                FOREIGN KEY (DATE) REFERENCES SERVICE(DATE))`,
+                                                (err)=>
+                                                {
+                                                    if(err)
+                                                    console.log("could not create billing table",err)
+                                                    else{
+                                                        console.log("billing table created")
+                                                    }
+                                                })
 })
 app.set("views","./views")
 app.set("view engine","ejs");
@@ -48,6 +60,9 @@ app.get("/",(req, res)=>{
 app.get("/home",(req, res)=>{
     res.render("home")
 })
+
+
+
 
 app.get("/addusers",(req, res)=>{
     res.render("addusers",{status:0})
@@ -85,7 +100,7 @@ app.post("/service",(req,res)=>{
     let Service_Detail=req.body.Service_Detail
     let Date=req.body.Date
         db.run("INSERT INTO SERVICE(MECHANIC_ID,VEHICLE_NUMBER,SERVICE_DETAIL,DATE) VALUES(?,?,?,?)",
-        [Mechanic_Id,Vehicle_Number,Service_Detail,Date], (err)=>{
+        [Mechanic_Id,Vehicle_Number,Service_Detail,Date], (err)=>{  
             if(err){
             console.log(err)
             res.status(500).render("service",{status : err})
@@ -95,7 +110,23 @@ app.post("/service",(req,res)=>{
             res.status(200).render("service",{status:"success"})
         }
     })
-})
+})/* 
+app.post("/bill",(req,res)=>{
+    console.log("inside billing")
+    let service=req.body.service
+    let date=req.body.date
+        db.run("INSERT INTO BILLING(SERVICE,DATE) VALUES(?,?)",
+        [SERVICE,DATE],(err)=>{
+            if(err){
+                console.log(err)
+                res.status(500).render("billing",{status:err})
+            }
+            else{
+                res.render(200).render("billing",{status:"success"})
+            }
+        })
+}) */
+
 
 app.get("/users", (req, res)=>{      /* display users page */
         db.all("select *from users",(err, rows)=>{
@@ -106,6 +137,28 @@ app.get("/users", (req, res)=>{      /* display users page */
             res.render("users",{showusers :rows})
         })
 })  
+app.get("/allService",(req,res)=>{
+    db.all("select *from service",(err,rows)=>
+    {
+        console.log(rows)
+        if(err)
+            res.render("allService",{status:err})
+            res.render("allService",{showServiceDetails:rows})
+    })
+})
+
+app.get("/bill",(req,res)=>{
+    db.all("SELECT SERVICE.VEHICLE_NUMBER, SERVICE.SERVICE_DETAIL FROM SERVICE",(err,rows)=>
+    {
+        console.log(rows)
+        if(err){
+            console.log(err)
+            res.render("bill",{allBill:[],status:err})
+
+        }
+     res.render("bill",{allBill:rows})
+    })
+})
 
 app.listen(port, ()=>{
     console.log(`server started at port ${port}`)
