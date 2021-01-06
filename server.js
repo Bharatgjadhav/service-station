@@ -24,10 +24,11 @@ const db= new sqlite3.Database("./service-station.db",(err)=>{
                                      console.log(" USER table  created successfully")
                                      }
                          })
-        db.run(`CREATE TABLE IF NOT EXISTS SERVICE (MECHANIC_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        db.run(`CREATE TABLE IF NOT EXISTS SERVICE (MECHANIC_NAME VARCHAR(50) NOT NULL,
                                                    VEHICLE_NUMBER VARCHAR(25) UNIQUE NOT NULL, 
                                                    SERVICE_DETAIL VARCHAR(100) NOT NULL,
-                                                   DATE VARCHAR(10) NOT NULL)`,
+                                                   DATE VARCHAR(10) NOT NULL,
+                                                   AMOUNT INTEGER NOT NULL )`,
                                             (err)=>{
                                                 if(err)
                                                 console.log("could not create table",err)
@@ -54,7 +55,14 @@ app.set("view engine","ejs");
 let port=5000
 
 app.get("/",(req, res)=>{
-    res.render("index")
+    res.render("page1")
+})
+
+app.get("/adminside",(req,res)=>{
+    res.render("adminside")
+})
+app.get("/mechanicside",(req,res)=>{
+    res.render("mechanicside")
 })
 
 app.get("/home",(req, res)=>{
@@ -95,12 +103,13 @@ app.post("/addusers", (req, res)=>{
 })
 app.post("/service",(req,res)=>{
     console.log("inside service")
-    let Mechanic_Id =req.body.Mechanic_Id
+    let Mechanic_Name =req.body.Mechanic_Name
     let Vehicle_Number=req.body.Vehicle_Number
     let Service_Detail=req.body.Service_Detail
     let Date=req.body.Date
-        db.run("INSERT INTO SERVICE(MECHANIC_ID,VEHICLE_NUMBER,SERVICE_DETAIL,DATE) VALUES(?,?,?,?)",
-        [Mechanic_Id,Vehicle_Number,Service_Detail,Date], (err)=>{  
+    let Amount=req.body.Amount
+        db.run("INSERT INTO SERVICE(MECHANIC_NAME,VEHICLE_NUMBER,SERVICE_DETAIL,DATE,AMOUNT) VALUES(?,?,?,?,?)",
+        [Mechanic_Name,Vehicle_Number,Service_Detail,Date,Amount], (err)=>{  
             if(err){
             console.log(err)
             res.status(500).render("service",{status : err})
@@ -126,8 +135,6 @@ app.post("/bill",(req,res)=>{
             }
         })
 }) */
-
-
 app.get("/users", (req, res)=>{      /* display users page */
         db.all("select *from users",(err, rows)=>{
             console.log(rows)

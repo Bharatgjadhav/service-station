@@ -12,7 +12,7 @@
             <thead>
                 <tr>
                     <th>
-                        Mechanic-ID
+                        Mechanic-Name
                     </th>
                     <th>
                         Vehicle-number
@@ -23,15 +23,19 @@
                     <th>
                         Date
                     </th>
+                    <th>
+                        Amount
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <% for (let allService of showServiceDetails){%>
                 <tr>
-                    <td><%= allService.MECHANIC_ID %></td>
-                    <td><%=allService.VEHICLE_NUMBER %></td>
-                    <td><%=allService.SERVICE_DETAIL %></td>
-                    <td><%=allService.DATE %></td>
+                    <td><%=allService.MECHANIC_NAME%></td>
+                    <td><%=allService.VEHICLE_NUMBER%></td>
+                    <td><%=allService.SERVICE_DETAIL%></td>
+                    <td><%=allService.DATE%></td>
+                    <td><%=allService.AMOUNT%></td>
                 </tr>
                 <%}%>
             </tbody>
