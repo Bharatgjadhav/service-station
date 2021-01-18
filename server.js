@@ -10,7 +10,7 @@ const db= new sqlite3.Database("./service-station.db",(err)=>{
     else
     {
         console.log("db connected")
-        db.run(`CREATE TABLE IF NOT EXISTS USERS(USER_ID INTEGER PRIMARY KEY AUTOINCREMENT,
+        db.run(`CREATE TABLE IF NOT EXISTS USERS(ROLE VARCHAR(20) NOT NULL,
                                                   NAME VARCHAR(30) NOT NULL,
                                                   PHONE VARCHAR(15) UNIQUE NOT NULL,
                                                   GENDER VARCHAR(2) NOT NULL,
@@ -53,9 +53,9 @@ const db= new sqlite3.Database("./service-station.db",(err)=>{
 app.set("views","./views")
 app.set("view engine","ejs");
 let port=5000
-
+ 
 app.get("/",(req, res)=>{
-    res.render("page1")
+    res.render("login")
 })
 
 app.get("/adminside",(req,res)=>{
@@ -69,9 +69,6 @@ app.get("/home",(req, res)=>{
     res.render("home")
 })
 
-
-
-
 app.get("/addusers",(req, res)=>{
     res.render("addusers",{status:0})
 })
@@ -79,9 +76,11 @@ app.get("/service",(req,res)=>{
     res.render("service",{status:1})
 })
 
+
 app.post("/addusers", (req, res)=>{
     console.log("INSIDE")
-    let user_id = req.body.user_id
+    /* let user_id = req.body.user_id */
+    let role=req.body.role
     let name  = req.body.name
     let phone = req.body.phone
     console.log(phone);
@@ -90,8 +89,8 @@ app.post("/addusers", (req, res)=>{
     console.log(email_id)
     let address = req.body.address
     let password = req.body.password
-        db.run("INSERT INTO USERS(USER_ID,NAME,PHONE,GENDER,EMAIL_ID,ADDRESS,PASSWORD) VALUES(?,?,?,?,?,?,?)",
-        [user_id, name, phone, gender, email_id, address, password],(err)=>{
+        db.run("INSERT INTO USERS(ROLE,NAME,PHONE,GENDER,EMAIL_ID,ADDRESS,PASSWORD) VALUES(?,?,?,?,?,?,?)",
+        [role, name, phone, gender, email_id, address, password],(err)=>{
                         if(err){
                             console.log(err)
                             res.status(500).render("addusers",{status : err})
@@ -119,22 +118,34 @@ app.post("/service",(req,res)=>{
             res.status(200).render("service",{status:"success"})
         }
     })
-})/* 
-app.post("/bill",(req,res)=>{
-    console.log("inside billing")
-    let service=req.body.service
-    let date=req.body.date
-        db.run("INSERT INTO BILLING(SERVICE,DATE) VALUES(?,?)",
-        [SERVICE,DATE],(err)=>{
-            if(err){
-                console.log(err)
-                res.status(500).render("billing",{status:err})
-            }
-            else{
-                res.render(200).render("billing",{status:"success"})
+})
+
+app.post("/login",function(req,res){
+    let email_id=req.body.email_id;
+    let password=req.body.password;
+
+    if(req.body.email_id && req.body.password)
+    {
+        console.log("checking email "  +email_id+"password" +password)
+        let sql="select * from users where email_id=? AND password=?";
+        db.all(sql,[email_id,password],(err,rows)=>{
+            if(err)
+            {
+                console.log("error",err)
+            }else if(rows.length==0){
+                console.log("invalid credential")
+            }else if(rows[0].ROLE=="admin"){
+                console.log("admin logged in");
+                res.render("adminside")
+            }else{
+                console.log(rows);
+                console.log("Mechanic Login")
+                res.render("mechanicside")
             }
         })
-}) */
+    }
+})
+
 app.get("/users", (req, res)=>{      /* display users page */
         db.all("select *from users",(err, rows)=>{
             console.log(rows)
